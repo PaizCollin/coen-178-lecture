@@ -1,0 +1,832 @@
+SQL> start/home/cpaiz/COEN178/project/run.sql
+SQL> start/home/cpaiz/COEN178/project/drop.sql
+SQL> DROP TABLE Orders;
+
+Table dropped.
+
+SQL> DROP TABLE Customers;
+
+Table dropped.
+
+SQL> DROP TABLE TShirts;
+
+Table dropped.
+
+SQL> DROP TABLE ComicBooks;
+
+Table dropped.
+
+SQL> DROP TABLE StoreItems;
+
+Table dropped.
+
+SQL> start/home/cpaiz/COEN178/project/tables.sql
+SQL> CREATE TABLE StoreItems (
+  2  	 itemID VARCHAR(5) PRIMARY KEY,
+  3  	 price NUMBER(9,2)
+  4  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE ComicBooks (
+  2  	 itemID VARCHAR(5) REFERENCES StoreItems(itemID),
+  3  	 ISBN CHAR(13) UNIQUE,
+  4  	 publishedDate DATE,
+  5  	 numCopies INT CHECK(numCopies >= 0),
+  6  	 title VARCHAR(20),
+  7  	 PRIMARY KEY(itemID)
+  8  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE TShirts (
+  2  	 itemID VARCHAR(5) REFERENCES StoreItems(itemID),
+  3  	 shirtSize VARCHAR(2),
+  4  	 PRIMARY KEY(itemID)
+  5  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE Customers (
+  2  	 custID VARCHAR(5) PRIMARY KEY,
+  3  	 name VARCHAR(20),
+  4  	 phone INT UNIQUE NOT NULL,
+  5  	 address VARCHAR(30),
+  6  	 dateJoined DATE DEFAULT NULL,
+  7  	 custType VARCHAR(7) CHECK (custType = 'regular' OR custType = 'gold')
+  8  );
+
+Table created.
+
+SQL> 
+SQL> CREATE TABLE Orders (
+  2  	 orderID VARCHAR(5) PRIMARY KEY,
+  3  	 custID VARCHAR(5) REFERENCES Customers(custID),
+  4  	 itemID VARCHAR(5) REFERENCES StoreItems(itemID),
+  5  	 dateOrdered DATE,
+  6  	 numItems INT,
+  7  	 shippedDate DATE,
+  8  	 shippingFee NUMBER(9,2) DEFAULT 10.00,
+  9  	 CONSTRAINT checkTime CHECK (shippedDate >= dateOrdered)
+ 10  );
+
+Table created.
+
+SQL> start/home/cpaiz/COEN178/project/insert.sql
+SQL> INSERT INTO Customers VALUES ('00001', 'Collin', 8585250001, '111 Seagrove St', '01-JAN-22', 'gold');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00002', 'Sam', 8585250002, '222 Seachase St', '01-JAN-22', 'gold');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00003', 'Rob', 4187931234, '333 Benton St', '01-JAN-22', 'gold');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00004', 'Kyle', 8585250003, '444 Pepperdine Bend', '01-JAN-22', 'gold');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00005', 'Jason', 4187935678, '555 Bradshaw Ct', NULL, 'regular');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00006', 'Augustine', 8585250004, '666 Seagrove St', NULL, 'regular');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00007', 'David', 8585250005, '777 Del Mar Heights St', NULL, 'regular');
+
+1 row created.
+
+SQL> INSERT INTO Customers VALUES ('00008', 'Andrew', 8585250006, '888 Pepperdine Bend', NULL, 'regular');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO StoreItems VALUES ('00001', 100.00);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00002', 50.00);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00003', 80.00);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00004', 20.50);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00005', 30.00);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00006', 35.00);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00007', 19.50);
+
+1 row created.
+
+SQL> INSERT INTO StoreItems VALUES ('00008', 25.00);
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO ComicBooks VALUES ('00001', '1111111111111', '28-FEB-99', 2, 'Databaseables I');
+
+1 row created.
+
+SQL> INSERT INTO ComicBooks VALUES ('00002', '2222222222222', '05-FEB-01', 5, 'Databaseables II');
+
+1 row created.
+
+SQL> INSERT INTO ComicBooks VALUES ('00003', '3333333333333', '01-AUG-01', 10, 'Databaseables III');
+
+1 row created.
+
+SQL> INSERT INTO ComicBooks VALUES ('00004', '4444444444444', '21-OCT-01', 20, 'Databaseables IV');
+
+1 row created.
+
+SQL> 
+SQL> INSERT INTO TShirts VALUES ('00005', 'M');
+
+1 row created.
+
+SQL> INSERT INTO TShirts VALUES ('00006', 'XL');
+
+1 row created.
+
+SQL> INSERT INTO TShirts VALUES ('00007', 'S');
+
+1 row created.
+
+SQL> INSERT INTO TShirts VALUES ('00008', 'L');
+
+1 row created.
+
+SQL> 
+SQL> SELECT * FROM Customers;
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00001 Collin               8585250001 111 Seagrove St                01-JAN-22  
+gold                                                                            
+                                                                                
+00002 Sam                  8585250002 222 Seachase St                01-JAN-22  
+gold                                                                            
+                                                                                
+00003 Rob                  4187931234 333 Benton St                  01-JAN-22  
+gold                                                                            
+                                                                                
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00004 Kyle                 8585250003 444 Pepperdine Bend            01-JAN-22  
+gold                                                                            
+                                                                                
+00005 Jason                4187935678 555 Bradshaw Ct                           
+regular                                                                         
+                                                                                
+00006 Augustine            8585250004 666 Seagrove St                           
+regular                                                                         
+                                                                                
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00007 David                8585250005 777 Del Mar Heights St                    
+regular                                                                         
+                                                                                
+00008 Andrew               8585250006 888 Pepperdine Bend                       
+regular                                                                         
+                                                                                
+
+8 rows selected.
+
+SQL> SELECT * FROM StoreItems;
+
+ITEMI      PRICE                                                                
+----- ----------                                                                
+00001        100                                                                
+00002         50                                                                
+00003         80                                                                
+00004       20.5                                                                
+00005         30                                                                
+00006         35                                                                
+00007       19.5                                                                
+00008         25                                                                
+
+8 rows selected.
+
+SQL> SELECT * FROM ComicBooks;
+
+ITEMI ISBN          PUBLISHED  NUMCOPIES TITLE                                  
+----- ------------- --------- ---------- --------------------                   
+00001 1111111111111 28-FEB-99          2 Databaseables I                        
+00002 2222222222222 05-FEB-01          5 Databaseables II                       
+00003 3333333333333 01-AUG-01         10 Databaseables III                      
+00004 4444444444444 21-OCT-01         20 Databaseables IV                       
+
+SQL> SELECT * FROM TShirts;
+
+ITEMI SH                                                                        
+----- --                                                                        
+00005 M                                                                         
+00006 XL                                                                        
+00007 S                                                                         
+00008 L                                                                         
+
+SQL> start/home/cpaiz/COEN178/project/procedures.sql
+SQL> -- Procedure: addItemOrder
+SQL> -- adds item order into the Orders table
+SQL> CREATE OR REPLACE PROCEDURE addItemOrder(p_orderID in Orders.orderID%type, p_itemID in Orders.itemID%type, p_custID in Orders.custID%type, p_dateOrdered in Orders.dateOrdered%type, p_numItems in Orders.numItems%type, p_shippedDate in Orders.shippedDate%type)
+  2  AS
+  3  	 insufficientItems EXCEPTION;
+  4  	 l_numCopies ComicBooks.numCopies%type;
+  5  	 l_custType Customers.custType%type;
+  6  	 l_shippingFee Orders.shippingFee%type;
+  7  
+  8  BEGIN
+  9  	 SELECT numCopies INTO l_numCopies FROM ComicBooks WHERE itemID = p_itemID;
+ 10  	 SELECT custType INTO l_custType FROM Customers WHERE custID = p_custID;
+ 11  
+ 12  	 -- if gold member, set fee to $0.00, else $10.00 for regular members
+ 13  	 IF(l_custType = 'regular') THEN
+ 14  	     l_shippingFee := 10.00;
+ 15  	 ELSIF(l_custType = 'gold') THEN
+ 16  	     l_shippingFee := 0.00;
+ 17  	 END IF;
+ 18  
+ 19  	 -- if enough items in stock for order, insert order, update combook numCopies
+ 20  	 IF(l_numCopies >= p_numItems) THEN
+ 21  	     INSERT INTO Orders VALUES (p_orderID, p_custID, p_itemID, p_dateOrdered, p_numItems, NULL, l_shippingFee);
+ 22  	     UPDATE ComicBooks SET numCopies = l_numCopies - p_numItems WHERE itemID = p_itemID;
+ 23  	 ELSE
+ 24  	     RAISE insufficientItems;
+ 25  	 END IF;
+ 26  
+ 27  EXCEPTION
+ 28  	 WHEN insufficientItems THEN DBMS_OUTPUT.PUT_LINE('Insufficient item stock');
+ 29  	 WHEN NO_DATA_FOUND THEN
+ 30  	 DECLARE
+ 31  	     l_custType Customers.custType%type;
+ 32  	     l_shippingFee Orders.shippingFee%type;
+ 33  	 BEGIN
+ 34  	     SELECT custType INTO l_custType FROM Customers WHERE custID = p_custID;
+ 35  	     IF(l_custType = 'regular') THEN
+ 36  		 l_shippingFee := 10.00;
+ 37  	     ELSIF(l_custType = 'gold') THEN
+ 38  		 l_shippingFee := 0.00;
+ 39  	     END IF;
+ 40  
+ 41  	     INSERT INTO Orders VALUES (p_orderID, p_custID, p_itemID, p_dateOrdered, p_numItems, NULL, l_shippingFee);
+ 42  	 END;
+ 43  END;
+ 44  /
+
+Procedure created.
+
+SQL> show errors;
+No errors.
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Trigger: changeCustType
+SQL> -- updates the shipping fee on orders based on customer's type (gold $0.00, regular $10.00)
+SQL> CREATE OR REPLACE TRIGGER changeCustType
+  2  	 AFTER UPDATE ON Customers
+  3  	 FOR EACH ROW
+  4  BEGIN
+  5  	 IF :new.custType = 'gold' THEN
+  6  	     UPDATE Orders SET shippingFee = 0.00 WHERE custID = :new.custID AND (SYSDATE() <= shippedDate OR shippedDate IS NULL);
+  7  	 ELSE
+  8  	     UPDATE Orders SET shippingFee = 10.00 WHERE custID = :new.custID AND (SYSDATE() <= shippedDate OR shippedDate IS NULL);
+  9  	 END IF;
+ 10  END changeCustType;
+ 11  /
+
+Trigger created.
+
+SQL> show errors;
+No errors.
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Procedure: setShippingDate
+SQL> -- sets shipping date in Orders table based on provided orderID and date
+SQL> CREATE OR REPLACE PROCEDURE setShippingDate(p_orderID in Orders.orderID%type, p_shippedDate in Orders.shippedDate%type)
+  2  AS
+  3  	 shipBeforeOrder EXCEPTION;
+  4  	 l_dateOrdered Orders.dateOrdered%type;
+  5  
+  6  BEGIN
+  7  	 SELECT dateOrdered INTO l_dateOrdered FROM Orders WHERE orderID = p_orderID;
+  8  
+  9  	 IF(l_dateOrdered <= p_shippedDate) THEN
+ 10  	     UPDATE Orders SET shippedDate = p_shippedDate WHERE orderID = p_orderID;
+ 11  	 ELSE
+ 12  	     RAISE shipBeforeOrder;
+ 13  	 END IF;
+ 14  
+ 15  EXCEPTION
+ 16  	 WHEN shipBeforeOrder THEN DBMS_OUTPUT.PUT_LINE('Shipping date must not come before order date');
+ 17  
+ 18  END;
+ 19  /
+
+Procedure created.
+
+SQL> show errors;
+No errors.
+SQL> 
+SQL> 
+SQL> 
+SQL> -- Procedure: computeTotal
+SQL> -- takes an orderID, computes the total for that order and returns that total
+SQL> CREATE OR REPLACE FUNCTION computeTotal(p_orderID in Orders.orderID%type)
+  2  RETURN NUMBER
+  3  IS
+  4  	 l_subtotal StoreItems.price%type;
+  5  	 l_total StoreItems.price%type;
+  6  	 l_price StoreItems.price%type;
+  7  	 l_tax StoreItems.price%type;
+  8  	 l_shippingFee Orders.shippingFee%type;
+  9  	 l_numItems Orders.numItems%type;
+ 10  	 l_itemID Orders.itemID%type;
+ 11  
+ 12  BEGIN
+ 13  	 SELECT itemID INTO l_itemID FROM Orders WHERE orderID = p_orderID;
+ 14  	 SELECT price INTO l_price FROM StoreItems WHERE itemID = l_itemID;
+ 15  	 SELECT numItems INTO l_numItems FROM Orders WHERE orderID = p_orderID;
+ 16  	 SELECT shippingFee INTO l_shippingFee FROM Orders WHERE orderID = p_orderID;
+ 17  
+ 18  	 l_subtotal := l_price * l_numItems;
+ 19  
+ 20  	 IF(l_shippingFee = 0.00 AND l_subtotal >= 100.00) THEN
+ 21  	     l_subtotal := l_subtotal * 0.9;
+ 22  	 END IF;
+ 23  
+ 24  	 l_tax := l_subtotal * 0.05;
+ 25  	 l_total := l_subtotal + l_shippingFee + l_tax;
+ 26  
+ 27  	 RETURN l_total;
+ 28  END;
+ 29  /
+
+Function created.
+
+SQL> show errors;
+No errors.
+SQL> 
+SQL> -- Procedure: showItemOrders
+SQL> -- displays the details of each item order from a customer after a certain date
+SQL> CREATE OR REPLACE PROCEDURE showItemOrders(p_custID in Orders.custID%type, p_date in Orders.dateOrdered%type)
+  2  AS
+  3  	 l_custID Customers.custID%type;
+  4  	 l_name Customers.name%type;
+  5  	 l_phone Customers.phone%type;
+  6  	 l_address Customers.address%type;
+  7  
+  8  	 l_orderID Orders.orderID%type;
+  9  	 l_itemID Orders.itemID%type;
+ 10  	 l_title ComicBooks.title%type;
+ 11  	 l_price StoreItems.price%type;
+ 12  	 l_shirtSize TShirts.shirtSize%type;
+ 13  	 l_dateOrdered Orders.dateOrdered%type;
+ 14  	 l_shippedDate Orders.shippedDate%type;
+ 15  	 l_numItems Orders.numItems%type;
+ 16  
+ 17  	 l_subtotal StoreItems.price%type;
+ 18  	 l_tax StoreItems.price%type;
+ 19  	 l_shippingFee StoreItems.price%type;
+ 20  	 l_discount StoreItems.price%type;
+ 21  	 l_itemstotal StoreItems.price%type;
+ 22  	 l_grandtotal StoreItems.price%type := 0.0;
+ 23  
+ 24  	 CURSOR c_comics IS SELECT orderID, custID, itemID, title, price, dateOrdered, shippedDate, numItems, shippingFee FROM (ComicBooks JOIN ORDERS USING(itemID)) JOIN StoreItems USING(itemID) WHERE custID = p_custID AND dateOrdered >= p_date;
+ 25  
+ 26  	 CURSOR c_tshirts IS SELECT orderID, custID, itemID, shirtSize, price, dateOrdered, shippedDate, numItems, shippingFee FROM (TShirts JOIN ORDERS USING(itemID)) JOIN StoreItems USING(itemID) WHERE custID = p_custID AND dateOrdered >= p_date;
+ 27  
+ 28  BEGIN
+ 29  	 SELECT custID, name, phone, address INTO l_custID, l_name, l_phone, l_address FROM Customers WHERE custID = p_custID;
+ 30  	 DBMS_OUTPUT.PUT_LINE('Customer Details: ');
+ 31  	 DBMS_OUTPUT.PUT_LINE('CustomerID: ' || l_custID || ' | Name: ' || l_name || ' | Phone: ' || l_phone || ' | Address: ' || l_address);
+ 32  
+ 33  	 DBMS_OUTPUT.PUT_LINE('Comic Book Orders: ');
+ 34  	 OPEN c_comics;
+ 35  	 LOOP
+ 36  	     FETCH c_comics INTO l_orderID, l_custID, l_itemID, l_title, l_price, l_dateOrdered, l_shippedDate, l_numItems, l_shippingFee;
+ 37  	     EXIT WHEN c_comics%notfound;
+ 38  
+ 39  	     l_subtotal := l_price * l_numItems;
+ 40  
+ 41  	     IF(l_shippingFee = 0.00 AND l_subtotal >= 100.00) THEN
+ 42  		 l_discount := 0.10;
+ 43  	     ELSE
+ 44  		 l_discount := 0.00;
+ 45  	     END IF;
+ 46  
+ 47  	     l_discount := l_discount * l_subtotal;
+ 48  	     l_subtotal := l_subtotal - l_discount;
+ 49  	     l_tax := l_subtotal * 0.05;
+ 50  	     l_subtotal := l_subtotal + l_tax;
+ 51  	     l_itemstotal := l_subtotal + l_shippingFee;
+ 52  	     l_grandtotal := l_grandtotal + l_itemstotal;
+ 53  
+ 54  	     DBMS_OUTPUT.PUT_LINE('OrderID: ' || l_orderID || ' | ItemID: ' || l_itemID || ' | Title: ' || l_title || ' | Price: $' || l_price || ' | Date Ordered: ' || l_dateOrdered || ' | Date Shipped: ' || l_shippedDate || ' | Count: ' || l_numItems || ' | Discount: $' || l_discount || ' | Tax: $' || l_tax || ' | Order Total: $' || l_itemsTotal);
+ 55  	 END LOOP;
+ 56  	 CLOSE c_comics;
+ 57  
+ 58  	 DBMS_OUTPUT.PUT_LINE('TShirt Orders: ');
+ 59  	 OPEN c_tshirts;
+ 60  	 LOOP
+ 61  	     FETCH c_tshirts INTO l_orderID, l_custID, l_itemID, l_shirtSize, l_price, l_dateOrdered, l_shippedDate, l_numItems, l_shippingFee;
+ 62  	     EXIT WHEN c_tshirts%notfound;
+ 63  
+ 64  	     l_subtotal := l_price * l_numItems;
+ 65  
+ 66  	     IF(l_shippingFee = 0.00 AND l_subtotal >= 100.00) THEN
+ 67  		 l_discount := 0.10;
+ 68  	     ELSE
+ 69  		 l_discount := 0.00;
+ 70  	     END IF;
+ 71  
+ 72  	     l_discount := l_discount * l_subtotal;
+ 73  	     l_subtotal := l_subtotal - l_discount;
+ 74  	     l_tax := l_subtotal * 0.05;
+ 75  	     l_subtotal := l_subtotal + l_tax;
+ 76  	     l_itemstotal := l_subtotal + l_shippingFee;
+ 77  	     l_grandtotal := l_grandtotal + l_itemstotal;
+ 78  
+ 79  	     DBMS_OUTPUT.PUT_LINE('OrderID: ' || l_orderID || ' | ItemID: ' || l_itemID || ' | Size: ' || l_shirtSize || ' | Price: $' || l_price || ' | Date Ordered: ' || l_dateOrdered || ' | Date Shipped: ' || l_shippedDate || ' | Count: ' || l_numItems || ' | Discount: $' || l_discount || ' | Tax: $' || l_tax || ' | Order Total: $' || l_itemsTotal);
+ 80  	 END LOOP;
+ 81  	 CLOSE c_tshirts;
+ 82  
+ 83  	 DBMS_OUTPUT.PUT_LINE( ' Grand Total: $' || l_grandtotal);
+ 84  END;
+ 85  /
+
+Procedure created.
+
+SQL> show errors;
+No errors.
+SQL> start/home/cpaiz/COEN178/project/queries.sql
+SQL> -- test procedure addItemOrder (gold, comics)
+SQL> exec addItemOrder('00001', '00002', '00001','01-JUN-22',1,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT computeTotal('00001') FROM DUAL;
+
+COMPUTETOTAL('00001')                                                           
+---------------------                                                           
+                 52.5                                                           
+
+SQL> 
+SQL> -- test procedure addItemOrder (regular, comics)
+SQL> exec addItemOrder('00002', '00002', '00008','01-JUN-22',2,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT computeTotal('00002') FROM DUAL;
+
+COMPUTETOTAL('00002')                                                           
+---------------------                                                           
+                  115                                                           
+
+SQL> 
+SQL> -- test procedure addItemOrder (gold, tshirts)
+SQL> exec addItemOrder('00003', '00005', '00001','01-JUN-22',3,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT computeTotal('00003') FROM DUAL;
+
+COMPUTETOTAL('00003')                                                           
+---------------------                                                           
+                 94.5                                                           
+
+SQL> 
+SQL> -- test procedure addItemOrder (regular, tshirts)
+SQL> exec addItemOrder('00004', '00008', '00008','01-JUN-22',4,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT computeTotal('00004') FROM DUAL;
+
+COMPUTETOTAL('00004')                                                           
+---------------------                                                           
+                  115                                                           
+
+SQL> 
+SQL> -- test procedure addItemOrder (insufficient items exception)
+SQL> SELECT * FROM ComicBooks;
+
+ITEMI ISBN          PUBLISHED  NUMCOPIES TITLE                                  
+----- ------------- --------- ---------- --------------------                   
+00001 1111111111111 28-FEB-99          2 Databaseables I                        
+00002 2222222222222 05-FEB-01          2 Databaseables II                       
+00003 3333333333333 01-AUG-01         10 Databaseables III                      
+00004 4444444444444 21-OCT-01         20 Databaseables IV                       
+
+SQL> exec addItemOrder('00005', '00002', '00001','01-JUN-22',10,NULL);
+Insufficient item stock                                                         
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM ComicBooks;
+
+ITEMI ISBN          PUBLISHED  NUMCOPIES TITLE                                  
+----- ------------- --------- ---------- --------------------                   
+00001 1111111111111 28-FEB-99          2 Databaseables I                        
+00002 2222222222222 05-FEB-01          2 Databaseables II                       
+00003 3333333333333 01-AUG-01         10 Databaseables III                      
+00004 4444444444444 21-OCT-01         20 Databaseables IV                       
+
+SQL> 
+SQL> -- compare gold member total vs. regular member total (discount/shipping fee)
+SQL> -- gold member
+SQL> exec addItemOrder('00006', '00001', '00003','01-JUN-22',1,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT computeTotal('00006') FROM DUAL;
+
+COMPUTETOTAL('00006')                                                           
+---------------------                                                           
+                 94.5                                                           
+
+SQL> -- regular member
+SQL> exec addItemOrder('00007', '00001', '00008','01-JUN-22',1,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT computeTotal('00007') FROM DUAL;
+
+COMPUTETOTAL('00007')                                                           
+---------------------                                                           
+                  115                                                           
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- test trigger changeCustType
+SQL> SELECT * FROM Customers;
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00001 Collin               8585250001 111 Seagrove St                01-JAN-22  
+gold                                                                            
+                                                                                
+00002 Sam                  8585250002 222 Seachase St                01-JAN-22  
+gold                                                                            
+                                                                                
+00003 Rob                  4187931234 333 Benton St                  01-JAN-22  
+gold                                                                            
+                                                                                
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00004 Kyle                 8585250003 444 Pepperdine Bend            01-JAN-22  
+gold                                                                            
+                                                                                
+00005 Jason                4187935678 555 Bradshaw Ct                           
+regular                                                                         
+                                                                                
+00006 Augustine            8585250004 666 Seagrove St                           
+regular                                                                         
+                                                                                
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00007 David                8585250005 777 Del Mar Heights St                    
+regular                                                                         
+                                                                                
+00008 Andrew               8585250006 888 Pepperdine Bend                       
+regular                                                                         
+                                                                                
+
+8 rows selected.
+
+SQL> SELECT * FROM Orders;
+
+ORDER CUSTI ITEMI DATEORDER   NUMITEMS SHIPPEDDA SHIPPINGFEE                    
+----- ----- ----- --------- ---------- --------- -----------                    
+00001 00001 00002 01-JUN-22          1                     0                    
+00002 00008 00002 01-JUN-22          2                    10                    
+00003 00001 00005 01-JUN-22          3                     0                    
+00004 00008 00008 01-JUN-22          4                    10                    
+00006 00003 00001 01-JUN-22          1                     0                    
+00007 00008 00001 01-JUN-22          1                    10                    
+
+6 rows selected.
+
+SQL> 
+SQL> UPDATE Customers SET custType = 'gold', dateJoined = '05-FEB-22' WHERE custID = '00008';
+
+1 row updated.
+
+SQL> UPDATE Customers SET custType = 'regular', dateJoined = NULL WHERE custID = '00001';
+
+1 row updated.
+
+SQL> 
+SQL> SELECT * FROM Customers;
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00001 Collin               8585250001 111 Seagrove St                           
+regular                                                                         
+                                                                                
+00002 Sam                  8585250002 222 Seachase St                01-JAN-22  
+gold                                                                            
+                                                                                
+00003 Rob                  4187931234 333 Benton St                  01-JAN-22  
+gold                                                                            
+                                                                                
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00004 Kyle                 8585250003 444 Pepperdine Bend            01-JAN-22  
+gold                                                                            
+                                                                                
+00005 Jason                4187935678 555 Bradshaw Ct                           
+regular                                                                         
+                                                                                
+00006 Augustine            8585250004 666 Seagrove St                           
+regular                                                                         
+                                                                                
+
+CUSTI NAME                      PHONE ADDRESS                        DATEJOINE  
+----- -------------------- ---------- ------------------------------ ---------  
+CUSTTYP                                                                         
+-------                                                                         
+00007 David                8585250005 777 Del Mar Heights St                    
+regular                                                                         
+                                                                                
+00008 Andrew               8585250006 888 Pepperdine Bend            05-FEB-22  
+gold                                                                            
+                                                                                
+
+8 rows selected.
+
+SQL> SELECT * FROM Orders;
+
+ORDER CUSTI ITEMI DATEORDER   NUMITEMS SHIPPEDDA SHIPPINGFEE                    
+----- ----- ----- --------- ---------- --------- -----------                    
+00001 00001 00002 01-JUN-22          1                    10                    
+00002 00008 00002 01-JUN-22          2                     0                    
+00003 00001 00005 01-JUN-22          3                    10                    
+00004 00008 00008 01-JUN-22          4                     0                    
+00006 00003 00001 01-JUN-22          1                     0                    
+00007 00008 00001 01-JUN-22          1                     0                    
+
+6 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- test procedure setShippingDate
+SQL> SELECT * FROM Orders;
+
+ORDER CUSTI ITEMI DATEORDER   NUMITEMS SHIPPEDDA SHIPPINGFEE                    
+----- ----- ----- --------- ---------- --------- -----------                    
+00001 00001 00002 01-JUN-22          1                    10                    
+00002 00008 00002 01-JUN-22          2                     0                    
+00003 00001 00005 01-JUN-22          3                    10                    
+00004 00008 00008 01-JUN-22          4                     0                    
+00006 00003 00001 01-JUN-22          1                     0                    
+00007 00008 00001 01-JUN-22          1                     0                    
+
+6 rows selected.
+
+SQL> exec setShippingDate('00001', '02-JUN-22');
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM Orders;
+
+ORDER CUSTI ITEMI DATEORDER   NUMITEMS SHIPPEDDA SHIPPINGFEE                    
+----- ----- ----- --------- ---------- --------- -----------                    
+00001 00001 00002 01-JUN-22          1 02-JUN-22          10                    
+00002 00008 00002 01-JUN-22          2                     0                    
+00003 00001 00005 01-JUN-22          3                    10                    
+00004 00008 00008 01-JUN-22          4                     0                    
+00006 00003 00001 01-JUN-22          1                     0                    
+00007 00008 00001 01-JUN-22          1                     0                    
+
+6 rows selected.
+
+SQL> 
+SQL> -- test procedure setShippingDate (shipping date before order date exception)
+SQL> exec setShippingDate('00002', '01-MAY-22');
+Shipping date must not come before order date                                   
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT * FROM Orders;
+
+ORDER CUSTI ITEMI DATEORDER   NUMITEMS SHIPPEDDA SHIPPINGFEE                    
+----- ----- ----- --------- ---------- --------- -----------                    
+00001 00001 00002 01-JUN-22          1 02-JUN-22          10                    
+00002 00008 00002 01-JUN-22          2                     0                    
+00003 00001 00005 01-JUN-22          3                    10                    
+00004 00008 00008 01-JUN-22          4                     0                    
+00006 00003 00001 01-JUN-22          1                     0                    
+00007 00008 00001 01-JUN-22          1                     0                    
+
+6 rows selected.
+
+SQL> 
+SQL> 
+SQL> 
+SQL> -- test procedure showItemOrders
+SQL> exec addItemOrder('00008', '00004', '00008','01-JUN-22',3,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> exec addItemOrder('00009', '00007', '00008','01-JUN-22',12,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> exec showItemOrders('00008', '01-MAY-22');
+Customer Details:                                                               
+CustomerID: 00008 | Name: Andrew | Phone: 8585250006 | Address: 888 Pepperdine  
+Bend                                                                            
+Comic Book Orders:                                                              
+OrderID: 00007 | ItemID: 00001 | Title: Databaseables I | Price: $100 | Date    
+Ordered: 01-JUN-22 | Date Shipped:  | Count: 1 | Discount: $10 | Tax: $4.5 |    
+Order Total: $94.5                                                              
+OrderID: 00002 | ItemID: 00002 | Title: Databaseables II | Price: $50 | Date    
+Ordered: 01-JUN-22 | Date Shipped:  | Count: 2 | Discount: $10 | Tax: $4.5 |    
+Order Total: $94.5                                                              
+OrderID: 00008 | ItemID: 00004 | Title: Databaseables IV | Price: $20.5 | Date  
+Ordered: 01-JUN-22 | Date Shipped:  | Count: 3 | Discount: $0 | Tax: $3.08 |    
+Order Total: $64.58                                                             
+TShirt Orders:                                                                  
+OrderID: 00009 | ItemID: 00007 | Size: S | Price: $19.5 | Date Ordered:         
+01-JUN-22 | Date Shipped:  | Count: 12 | Discount: $23.4 | Tax: $10.53 | Order  
+Total: $221.13                                                                  
+OrderID: 00004 | ItemID: 00008 | Size: L | Price: $25 | Date Ordered: 01-JUN-22 
+| Date Shipped:  | Count: 4 | Discount: $10 | Tax: $4.5 | Order Total: $94.5    
+Grand Total: $569.21                                                            
+
+PL/SQL procedure successfully completed.
+
+SQL> 
+SQL> -- test procedure showItemOrders (before date)
+SQL> exec addItemOrder('00010', '00006', '00008','01-APR-22',4,NULL);
+
+PL/SQL procedure successfully completed.
+
+SQL> exec showItemOrders('00008', '01-MAY-22');
+Customer Details:                                                               
+CustomerID: 00008 | Name: Andrew | Phone: 8585250006 | Address: 888 Pepperdine  
+Bend                                                                            
+Comic Book Orders:                                                              
+OrderID: 00007 | ItemID: 00001 | Title: Databaseables I | Price: $100 | Date    
+Ordered: 01-JUN-22 | Date Shipped:  | Count: 1 | Discount: $10 | Tax: $4.5 |    
+Order Total: $94.5                                                              
+OrderID: 00002 | ItemID: 00002 | Title: Databaseables II | Price: $50 | Date    
+Ordered: 01-JUN-22 | Date Shipped:  | Count: 2 | Discount: $10 | Tax: $4.5 |    
+Order Total: $94.5                                                              
+OrderID: 00008 | ItemID: 00004 | Title: Databaseables IV | Price: $20.5 | Date  
+Ordered: 01-JUN-22 | Date Shipped:  | Count: 3 | Discount: $0 | Tax: $3.08 |    
+Order Total: $64.58                                                             
+TShirt Orders:                                                                  
+OrderID: 00009 | ItemID: 00007 | Size: S | Price: $19.5 | Date Ordered:         
+01-JUN-22 | Date Shipped:  | Count: 12 | Discount: $23.4 | Tax: $10.53 | Order  
+Total: $221.13                                                                  
+OrderID: 00004 | ItemID: 00008 | Size: L | Price: $25 | Date Ordered: 01-JUN-22 
+| Date Shipped:  | Count: 4 | Discount: $10 | Tax: $4.5 | Order Total: $94.5    
+Grand Total: $569.21                                                            
+
+PL/SQL procedure successfully completed.
+
+SQL> spool off
